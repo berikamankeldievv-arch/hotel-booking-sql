@@ -66,7 +66,8 @@ SELECT 1 + (i % 5),
        DATE '2018-01-01' + ((i * 17) % 2500),
        800 + ((i * 53) % 2200),
        CASE WHEN i % 25 = 0 THEN 'on_leave' ELSE 'active' END
-FROM (SELECT i, 1 + (i % 8) AS d FROM generate_series(1, 150) i) e;
+FROM (SELECT i, 1 + (i % 8) AS d FROM generate_series(1, 150) i) e
+ORDER BY e.i;
 
 -- 7. rooms (5 қонақүй x 100 = 500)
 INSERT INTO rooms (hotel_id, room_type_id, room_number, floor, status)
@@ -75,7 +76,8 @@ SELECT h,
        (((n - 1) / 10 + 1) * 100 + ((n - 1) % 10 + 1))::text,
        (n - 1) / 10 + 1,
        'available'
-FROM generate_series(1, 5) h, generate_series(1, 100) n;
+FROM generate_series(1, 5) h, generate_series(1, 100) n
+ORDER BY h, n;
 
 -- 8. guests (350)
 INSERT INTO guests (first_name, last_name, email, phone, passport_number, country, birth_date)
@@ -113,7 +115,8 @@ FROM (
 ) b
 JOIN rooms ro       ON ro.room_id = b.r
 JOIN room_types rt  ON rt.room_type_id = ro.room_type_id
-LEFT JOIN discounts dc ON dc.discount_id = b.d;
+LEFT JOIN discounts dc ON dc.discount_id = b.d
+ORDER BY b.i;
 
 -- 10. booking_guests (негізгі қонақ + кейбір брондауға қосымша қонақ)
 INSERT INTO booking_guests (booking_id, guest_id, is_primary)
